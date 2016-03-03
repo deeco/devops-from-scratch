@@ -1,0 +1,17 @@
+- name: Configure application
+  hosts: all
+  vars:
+      repository_url: https://github.com/kevinlondon/flask-hello-world.git
+      repository_path: ~/flask-hello-world
+
+  tasks:
+    - name: Install packages
+      apt: update_cache=yes name={{ item }} state=present
+      with_items:
+        - git
+        - python-pip
+      become: true
+      become_method: sudo
+
+    - name: Clone repository
+      git: repo='{{ repository_url }}' dest='{{ repository_path }}'
