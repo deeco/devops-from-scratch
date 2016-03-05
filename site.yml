@@ -1,5 +1,7 @@
 - name: Configure application
   hosts: all
+  become: true
+  become_method: sudo
   vars:
       repository_url: https://github.com/kevinlondon/flask-hello-world.git
       repository_path: /home/vagrant/flask-hello-world
@@ -10,13 +12,15 @@
       with_items:
         - git
         - python-pip
-      become: true
-      become_method: sudo
 
     - name: Clone repository
       git: repo='{{ repository_url }}' dest='{{ repository_path }}'
 
     - name: Install requirements
       pip: requirements='{{ repository_path }}/requirements.txt'
-      become: true
-      become_method: sudo
+
+    - name: Copy Upstart configuration
+      template: src=hello-world.conf.j2 dest=/etc/init/hello-world.conf
+
+    - name: Make sure our server is running
+      service: name=hello-world state=started
