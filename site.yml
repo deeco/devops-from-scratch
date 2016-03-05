@@ -2,7 +2,7 @@
   hosts: all
   vars:
       repository_url: https://github.com/kevinlondon/flask-hello-world.git
-      repository_path: ~/flask-hello-world
+      repository_path: /home/vagrant/flask-hello-world
 
   tasks:
     - name: Install packages
@@ -15,3 +15,8 @@
 
     - name: Clone repository
       git: repo='{{ repository_url }}' dest='{{ repository_path }}'
+
+    - name: Install requirements
+      pip: requirements='{{ repository_path }}/requirements.txt'
+      become: true
+      become_method: sudo
