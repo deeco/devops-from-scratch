@@ -12,6 +12,7 @@
       with_items:
         - git
         - python-pip
+        - nginx
 
     - name: Clone repository
       git: repo='{{ repository_url }}' dest='{{ repository_path }}'
@@ -24,3 +25,18 @@
 
     - name: Make sure our server is running
       service: name=hello-world state=started
+
+    - name: Copy nginx configuration
+      template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
+      notify:
+        - reloaded nginx
+
+    - name: Remove any default sites
+      file: path=/etc/nginx/sites-enabled/default state=absent
+
+    - name: Make sure nginx is running
+      service: name=nginx state=started
+
+  handlers:
+    - name: restart nginx
+      service: name=nginx state=restarted
