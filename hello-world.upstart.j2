@@ -8,4 +8,4 @@ setuid nobody
 setgid nogroup
 chdir {{ repository_path }}
 
-exec gunicorn app:app --bind unix:/tmp/gunicorn.sock --workers 3
+exec gunicorn app:app --bind unix:/tmp/hello_world.sock --workers 3
