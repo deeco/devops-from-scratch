@@ -1,0 +1,12 @@
+[Unit]
+Description=Gunicorn instance to serve hello-world
+After=network.target
+
+[Service]
+User=vagrant
+Group=ubuntu
+WorkingDirectory={{ repository_path }}
+ExecStart=/usr/local/bin/gunicorn app:app --workers 3 --bind unix:/tmp/hello_world.sock
+
+[Install]
+WantedBy=multi-user.target
